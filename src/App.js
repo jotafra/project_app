@@ -1,11 +1,13 @@
 //import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button} from 'react-native';
 import Login from './screens/login';
+import Cadastro from './screens/cadastro';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Login></Login>
+      {/* <Login></Login> */}
+      <Cadastro></Cadastro>
     </View>
   );
 }
