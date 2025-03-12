@@ -1,0 +1,12 @@
+/myApp
+  /src
+    /screens
+      HomeScreen.js
+      LoginScreen.js
+      CadastroScreen.js
+      CadastroEventoScreen.js
+      CadastroOrganizadorScreen.js
+      CadastroIngressoScreen.js
+    /axios
+      axios.js
+  App.js

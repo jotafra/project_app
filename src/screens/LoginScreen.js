@@ -6,20 +6,21 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Button
+  Button,
 } from "react-native";
 import api from "../axios/axios";
-import Cadastro from "./cadastro";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+
   async function handleLogin() {
     await api.postLogin(user).then(
       (response) => {
         Alert.alert("OK", response.data.message);
+        navigation.navigate("Home")
       },
       (error) => {
         Alert.alert("Erro", error.response.data.error);
@@ -30,7 +31,7 @@ export default function Login({navigation}) {
     <View style={styles.container}>
       <Text style={styles.title}> Faça Login </Text>
       <TextInput
-      style={styles.input}
+        style={styles.input}
         placeholder="Email"
         value={user.email}
         onChangeText={(value) => {
@@ -48,7 +49,7 @@ export default function Login({navigation}) {
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text> Entrar </Text>
       </TouchableOpacity>
-      <Button title="Cadastro" onPress={() => navigation.navigate("Cadastro",)}/>
+      <Button title="Cadastro" onPress={() => navigation.navigate("Cadastro")}/>
     </View>
   );
 }
