@@ -63,7 +63,7 @@ export default function Login({}) {
           onPress={() => setUser({ ...user, showPassord: !user.showPassord })}
         >
           <Ionicons
-            name={user.showPassord ? "eye-off" : "eye"}
+            name={user.showPassord ? "eye-off-outline" : "eye-outline"}
             size={24}
             color="gray"
           />
