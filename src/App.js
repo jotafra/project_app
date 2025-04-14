@@ -1,4 +1,5 @@
 import Login from "./screens/LoginScreen";
+import EventosScreen from "./screens/EventosScreen";
 import Cadastro from "./screens/CadastroScreen";
 import Home from "./screens/HomeScreen";
 import CadastroEvento from "./screens/CadastroEventoScreen";
@@ -17,8 +18,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:true}}>
-        <Stack.Screen name="TaskList" component={TaskList}/>
-        <Stack.Screen name="TaskDetail" component={TaskDetail}/>
+        {/* <Stack.Screen name="TaskList" component={TaskList}/>
+        <Stack.Screen name="TaskDetail" component={TaskDetail}/> */}
         <Stack.Screen
           name="Login"
           component={() => (
