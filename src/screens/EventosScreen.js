@@ -1,9 +1,9 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../axios/axios";
 import {
   View,
   Text,
-  Flatlist,
+  FlatList,
   TouchableOpacity,
   Modal,
   StyleSheet,
@@ -15,7 +15,7 @@ export default function EventosScreen() {
   const [ingressos, setIngressos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [eventoSelecionado, setEventoSelecionado] = useState(null);
+  const [eventoSelecionado, setEventoSelecionado] = useState("");
 
   useEffect(() => {
     getEventos();
@@ -32,24 +32,63 @@ export default function EventosScreen() {
     }
   }
 
+  async function abrirModalComIngressos(evento){
+    setEventoSelecionado(evento);
+    setModalVisible(true);
+
+    try {
+      const response = await api.getIngressosPorEvento(evento.id_evento);
+      setIngressos(response.data.ingressos);
+    } catch (error) {
+      console.log("Error ao buscar ingressos", error.response);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> Eventos disponíveis </Text>
-      {loading ? <ActivityIndicator size="large" 
-      color="blue" /> : <Flatlist 
-      data={eventos}
-      keyExtractor={(item)=> item.id_evento.
-        toString()} 
-        renderItem={({item})=>(
-            <TouchableOpacity style={styles.eventCard}
-            onPress={()=> console.log("Abir o Modal")}
-            >
-                <Text style={styles.eventName}>{item.nome}</Text>
-                <Text>{item.local}</Text>
-                <Text>{new Date (item.data_hora).toLocaleDateString}</Text>
-            </TouchableOpacity>
-        )}
-      />}
+      <Text style={styles.title}>Eventos Dísponiveis</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="red" />
+      ) : (
+        <FlatList
+          data={eventos}
+          keyExtractor={(item) => item.id_evento.toString()}
+          renderItem={({ item }) => <TouchableOpacity style={styles.eventCard} onPress={()=> abrirModalComIngressos(item)}>
+            <Text style={styles.eventName}>{item.nome}</Text>
+            <Text>{item.local}</Text>
+            <Text>{new Date(item.data_hora).toLocaleString}</Text>
+          </TouchableOpacity>}
+        />
+      )}
+      <Modal 
+      visible={modalVisible}
+      onRequestClose={()=>setModalVisible(false)}
+      animationType="slide"
+      >
+        <View style={styles.modalContainer}>
+          <Text>
+            Ingressos para: {eventoSelecionado.nome}
+          </Text>
+          {ingressos.length === 0 ? (
+            <Text>Nenhum ingresso encontrado</Text>
+          ) : (
+            <FlatList
+            data = {ingressos}
+            keyExtractor={(item) =>item.id_ingresso.toString()}
+            renderItem={({item})=>(
+              <View>
+                <Text>Tipo: {item.tipo}</Text>
+                <Text>Preço: R${item.preco}</Text>
+              </View>
+            )}
+            />
+          )}
+          <TouchableOpacity style={styles.closeButton} onPress={()=>setModalVisible(false)}>
+            <Text style={{color:"white"}}>Fechar</Text>
+          </TouchableOpacity>
+        </View>
+
+      </Modal>
     </View>
   );
 }
