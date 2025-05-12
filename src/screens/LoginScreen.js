@@ -12,6 +12,7 @@ import api from "../axios/axios";
 import Cadastro from "./CadastroScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login({}) {
   const [user, setUser] = useState({
@@ -22,11 +23,17 @@ export default function Login({}) {
 
   const navigation = useNavigation();
 
+  async function saveToken(token) {
+    await SecureStore.setItemAsync();
+    console.log(token);
+  }
+
   async function handleLogin() {
     await api.postLogin(user).then(
       (response) => {
         console.log(response.data.message);
         Alert.alert("OK", response.data.message);
+        saveToken(response.data.token);
         navigation.navigate("Home");
       },
       (error) => {
@@ -35,7 +42,6 @@ export default function Login({}) {
       }
     );
   }
-
 
   return (
     <View style={styles.container}>
